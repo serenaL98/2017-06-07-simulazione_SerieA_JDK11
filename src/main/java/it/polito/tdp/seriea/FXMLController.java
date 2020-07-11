@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.seriea.model.Model;
+import it.polito.tdp.seriea.model.Season;
+import it.polito.tdp.seriea.model.Team;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -20,10 +22,10 @@ public class FXMLController {
     private URL location;
 
     @FXML
-    private ChoiceBox<?> boxSeason;
+    private ChoiceBox<Season> boxSeason;
 
     @FXML
-    private ChoiceBox<?> boxTeam;
+    private ChoiceBox<Team> boxTeam;
 
     @FXML
     private TextArea txtResult;
@@ -31,11 +33,36 @@ public class FXMLController {
     @FXML
     void handleCarica(ActionEvent event) {
 
+    	txtResult.clear();
+    	
+    	Season stag = this.boxSeason.getValue();
+    	if(stag == null) {
+    		txtResult.setText("Selezionare una stagione dal menù.");
+    		return;
+    	}
+    	
+    	String stagione = stag.getDescription();
+    	
+    	txtResult.appendText("Crea grafo...");
+    	
+    	this.model.creaGrafo(stagione);
+    	
+    	txtResult.appendText("\n\n#VERTICI: "+this.model.numeroVertici());
+    	txtResult.appendText("\n#ARCHI: "+this.model.numeroArchi());
+    	txtResult.appendText("\n\nClassifica finale:\n"+this.model.classificaFinale(stagione));
+    	
+    	this.boxTeam.getItems().addAll(this.model.elencoSquadre());
     }
 
     @FXML
     void handleDomino(ActionEvent event) {
 
+    	txtResult.clear();
+    	
+    	Team squadra = this.boxTeam.getValue();
+    	
+    	txtResult.appendText("Cammino massimo:\n"+this.model.risultato(squadra));
+    	
     }
 
     @FXML
@@ -48,5 +75,6 @@ public class FXMLController {
 
 	public void setModel(Model model) {
 		this.model = model;
+		this.boxSeason.getItems().addAll(this.model.elencoStagioni());
 	}
 }

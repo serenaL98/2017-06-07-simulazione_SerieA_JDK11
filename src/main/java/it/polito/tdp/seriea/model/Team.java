@@ -3,7 +3,7 @@ package it.polito.tdp.seriea.model;
 public class Team {
 	
 	private String team ;
-
+	
 	public Team(String team) {
 		super();
 		this.team = team;
@@ -61,9 +61,6 @@ public class Team {
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }
 
